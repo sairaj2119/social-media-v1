@@ -6,6 +6,7 @@ import cookieParser from 'cookie-parser';
 
 import userRoutes from './routes/userRoutes';
 import authRoutes from './routes/authRoutes';
+import postRoutes from './routes/postRoutes';
 
 (async () => {
   const app = express();
@@ -15,6 +16,7 @@ import authRoutes from './routes/authRoutes';
   app.use(cookieParser());
   app.use('/users', userRoutes);
   app.use('/auth', authRoutes);
+  app.use('/posts', postRoutes);
 
   app.get('/', (_: Request, res: Response) => {
     res.send('working');

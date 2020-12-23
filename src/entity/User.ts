@@ -1,8 +1,9 @@
-import { Entity, Column, Index, BeforeInsert } from 'typeorm';
+import { Entity, Column, Index, BeforeInsert, OneToMany } from 'typeorm';
 import bcrypt from 'bcryptjs';
 import { Exclude } from 'class-transformer';
 
 import Base from './Base';
+import Post from './Post';
 import { IsEmail, Length } from 'class-validator';
 
 @Entity('users')
@@ -21,6 +22,9 @@ export default class User extends Base {
   @Length(6, 255)
   @Column()
   password: string;
+
+  @OneToMany(() => Post, (post) => post.user)
+  posts: Post[];
 
   @BeforeInsert()
   async hashPassword() {
