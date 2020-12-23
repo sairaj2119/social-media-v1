@@ -11,10 +11,10 @@ import { v4 as uuid } from 'uuid';
 
 export class Base extends BaseEntity {
   @PrimaryGeneratedColumn()
-  id: number;
+  _id: number;
 
   @Column()
-  uuid: string;
+  id: string;
 
   @CreateDateColumn()
   createdAt: Date;
@@ -24,6 +24,6 @@ export class Base extends BaseEntity {
 
   @BeforeInsert()
   createUUID() {
-    this.uuid = uuid();
+    this.id = uuid();
   }
 }

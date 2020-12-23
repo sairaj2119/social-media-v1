@@ -36,10 +36,12 @@ export const loginUser = async (req: Request, res: Response) => {
   const valid = await compare(password, user.password);
   if (!valid) return res.status(400).json({ error: 'Invalid credentials' });
 
-  const token = sign({ uuid: user.uuid }, process.env.JWT_SECRET!);
+  const token = sign({ id: user.id }, process.env.JWT_SECRET!, {
+    expiresIn: '60m',
+  });
   res.set(
     'Set-Cookie',
-    cookie.serialize('token', token, {
+    cookie.serialize('token', `Bearer ${token}`, {
       httpOnly: true,
       secure: process.env.NODE_ENV === 'production',
       sameSite: 'strict',

@@ -1,13 +1,16 @@
-import { Request, Response, Router } from 'express';
-import { User } from '../entity/User';
+import { Router } from 'express';
+
+import {
+  getAllUsers,
+  getLoggedInUserProfile,
+  getUserProfile,
+} from '../controllers/userController';
+import { auth } from '../middlewares/auth';
 
 const router = Router();
 
-// REGISTER  a user
-router.get('/', async (_: Request, res: Response) => {
-  const users = await User.find();
-
-  res.json(users);
-});
+router.get('/', getAllUsers);
+router.get('/me', auth, getLoggedInUserProfile);
+router.get('/:username', getUserProfile);
 
 export default router;

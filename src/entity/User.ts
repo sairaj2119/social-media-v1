@@ -25,6 +25,6 @@ export class User extends Base {
     this.password = await bcrypt.hash(this.password, 10);
   }
   toJSON() {
-    return { ...this, id: undefined, password: undefined };
+    return { ...this, _id: undefined, password: undefined };
   }
 }
