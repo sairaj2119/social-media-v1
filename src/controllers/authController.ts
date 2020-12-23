@@ -4,7 +4,7 @@ import { compare } from 'bcryptjs';
 import { sign } from 'jsonwebtoken';
 import cookie from 'cookie';
 
-import { User } from '../entity/User';
+import User from '../entity/User';
 
 export const registerUser = async (req: Request, res: Response) => {
   const { username, email, password } = req.body;

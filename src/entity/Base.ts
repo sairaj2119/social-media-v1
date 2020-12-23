@@ -1,3 +1,4 @@
+import { classToPlain, Exclude } from 'class-transformer';
 import {
   PrimaryGeneratedColumn,
   Column,
@@ -9,7 +10,8 @@ import {
 
 import { v4 as uuid } from 'uuid';
 
-export class Base extends BaseEntity {
+export default abstract class Base extends BaseEntity {
+  @Exclude()
   @PrimaryGeneratedColumn()
   _id: number;
 
@@ -25,5 +27,8 @@ export class Base extends BaseEntity {
   @BeforeInsert()
   createUUID() {
     this.id = uuid();
+  }
+  toJSON() {
+    return classToPlain(this);
   }
 }

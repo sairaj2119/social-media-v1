@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import { User } from '../entity/User';
+import User from '../entity/User';
 
 export const getLoggedInUserProfile = async (_: Request, res: Response) => {
   return res.send(res.locals.user);
