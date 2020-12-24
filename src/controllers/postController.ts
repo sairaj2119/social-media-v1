@@ -7,7 +7,6 @@ export const createPost = async (req: Request, res: Response) => {
   const post = Post.create({ title, body, user });
 
   await post.save();
-
   return res.json(post);
 };
 
@@ -17,4 +16,15 @@ export const getAllPosts = async (_: Request, res: Response) => {
     order: { createdAt: 'DESC' },
   });
   return res.json(posts);
+};
+
+export const getOnePost = async (req: Request, res: Response) => {
+  const id = req.params.id;
+
+  const post = await Post.findOne({ id }, { relations: ['user'] });
+  if (!post) {
+    return res.status(400).json({ error: 'Post not found' });
+  }
+
+  return res.json(post);
 };
