@@ -28,3 +28,39 @@ export const getOnePost = async (req: Request, res: Response) => {
 
   return res.json(post);
 };
+
+export const updateOnePost = async (req: Request, res: Response) => {
+  const id = req.params.id;
+  const { title, body } = req.body;
+
+  const post = await Post.findOne({ id }, { relations: ['user'] });
+
+  if (!post) return res.status(400).json({ error: 'Post not found' });
+  const isLoggedInUsersPost = res.locals.user.id === post.user.id;
+
+  if (!isLoggedInUsersPost)
+    return res.status(400).json({ error: 'Unauthorized' });
+
+  post.title = title || post.title;
+  post.body = body || post.body;
+  if (title || body) await post.save();
+
+  return res.json(post);
+};
+
+export const deleteOnePost = async (req: Request, res: Response) => {
+  const id = req.params.id;
+
+  const post = await Post.findOne({ id }, { relations: ['user'] });
+  if (!post) {
+    return res.status(400).json({ error: 'Post not found' });
+  }
+
+  const isLoggedInUsersPost = res.locals.user.id === post.user.id;
+  if (!isLoggedInUsersPost)
+    return res.status(400).json({ error: 'Unauthorized' });
+
+  await post.remove();
+
+  return res.json({ message: 'post deleted' });
+};
