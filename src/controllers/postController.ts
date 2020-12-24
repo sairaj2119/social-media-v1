@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import Post from '../entity/Post';
+import { Post } from '../entity';
 
 export const createPost = async (req: Request, res: Response) => {
   const { title, body } = req.body;
@@ -11,17 +11,19 @@ export const createPost = async (req: Request, res: Response) => {
 };
 
 export const getAllPosts = async (_: Request, res: Response) => {
-  const posts = await Post.find({
-    relations: ['user'],
+  const posts = await Post.findAndCount({
+    relations: ['user', 'comments'],
     order: { createdAt: 'DESC' },
+    take: 10,
   });
+
   return res.json(posts);
 };
 
 export const getOnePost = async (req: Request, res: Response) => {
   const id = req.params.id;
 
-  const post = await Post.findOne({ id }, { relations: ['user'] });
+  const post = await Post.findOne({ id }, { relations: ['user', 'comments'] });
   if (!post) {
     return res.status(400).json({ error: 'Post not found' });
   }

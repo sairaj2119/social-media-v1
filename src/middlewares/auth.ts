@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from 'express';
 import { verify } from 'jsonwebtoken';
-import User from '../entity/User';
+import { User } from '../entity';
 
 export const auth = async (req: Request, res: Response, next: NextFunction) => {
   try {

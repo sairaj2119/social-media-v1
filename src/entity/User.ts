@@ -1,21 +1,21 @@
 import { Entity, Column, Index, BeforeInsert, OneToMany } from 'typeorm';
 import bcrypt from 'bcryptjs';
 import { Exclude } from 'class-transformer';
+import { IsEmail, Length } from 'class-validator';
 
 import Base from './Base';
-import Post from './Post';
-import { IsEmail, Length } from 'class-validator';
+import { Post } from '.';
 
 @Entity('users')
 export default class User extends Base {
   @Length(3, 255)
   @Index()
-  @Column()
+  @Column({ unique: true })
   username: string;
 
   @IsEmail({}, { message: 'Invalid email address' })
   @Index()
-  @Column()
+  @Column({ unique: true })
   email: string;
 
   @Exclude()
