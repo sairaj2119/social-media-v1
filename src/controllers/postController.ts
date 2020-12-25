@@ -12,7 +12,7 @@ export const createPost = async (req: Request, res: Response) => {
 
 export const getAllPosts = async (_: Request, res: Response) => {
   const posts = await Post.findAndCount({
-    relations: ['user', 'comments'],
+    relations: ['user', 'comments', 'likes'],
     order: { createdAt: 'DESC' },
     take: 10,
   });

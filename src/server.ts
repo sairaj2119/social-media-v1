@@ -8,6 +8,7 @@ import userRoutes from './routes/userRoutes';
 import authRoutes from './routes/authRoutes';
 import postRoutes from './routes/postRoutes';
 import commentRoutes from './routes/commentRoutes';
+import likeRoutes from './routes/likeRoutes';
 
 (async () => {
   const app = express();
@@ -19,6 +20,7 @@ import commentRoutes from './routes/commentRoutes';
   app.use('/auth', authRoutes);
   app.use('/posts', postRoutes);
   app.use('/comments', commentRoutes);
+  app.use('/like', likeRoutes);
 
   app.get('/', (_: Request, res: Response) => {
     res.send('working');
