@@ -18,7 +18,7 @@ import commentRoutes from './routes/commentRoutes';
   app.use('/users', userRoutes);
   app.use('/auth', authRoutes);
   app.use('/posts', postRoutes);
-  app.use('/comments', commentRoutes)
+  app.use('/comments', commentRoutes);
 
   app.get('/', (_: Request, res: Response) => {
     res.send('working');
