@@ -4,7 +4,8 @@ import { Exclude } from 'class-transformer';
 import { IsEmail, Length } from 'class-validator';
 
 import Base from './Base';
-import { Post } from '.';
+import Comment from './Comment'
+import Post from './Post'
 
 @Entity('users')
 export default class User extends Base {
@@ -25,6 +26,10 @@ export default class User extends Base {
 
   @OneToMany(() => Post, (post) => post.user)
   posts: Post[];
+
+
+  @OneToMany(() => Comment, (comment) => comment.user)
+  comments: Comment[];
 
   @BeforeInsert()
   async hashPassword() {
