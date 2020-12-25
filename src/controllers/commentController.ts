@@ -14,6 +14,7 @@ export const postComment = async (req: Request, res: Response) => {
 
   await comment.save();
   post.comments.unshift(comment);
+  post.commentsCount = post.comments.length;
   await post.save();
 
   return res.json(comment);
@@ -58,7 +59,6 @@ export const deleteComment = async (req: Request, res: Response) => {
 
   if (!post) return res.status(400).json({ error: 'post not found' });
   if (!comment) return res.status(400).json({ error: 'comment not found' });
-
   const postHasComment = post.comments.find((c) => c.id === cid);
   const commentBelongsToLoggedInUser = comment.commentor === user.username;
 
@@ -66,10 +66,11 @@ export const deleteComment = async (req: Request, res: Response) => {
     return res
       .status(400)
       .json({ error: 'post does not have the given comment' });
-
   if (!commentBelongsToLoggedInUser)
     return res.status(400).json({ error: 'unauthorized' });
 
   await comment.remove();
+  post.commentsCount = post.comments.length - 1;
+
   return res.json({ message: 'comment deleted ' });
 };

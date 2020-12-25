@@ -13,6 +13,12 @@ export default class Post extends Base {
   @Column()
   body: string;
 
+  @Column({ default: 0 })
+  likesCount: number;
+
+  @Column({ default: 0 })
+  commentsCount: number;
+
   @OneToMany(() => Comment, (comment) => comment.post)
   comments: Comment[];
 

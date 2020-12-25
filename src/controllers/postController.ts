@@ -1,4 +1,5 @@
 import { Request, Response } from 'express';
+import { getConnection } from 'typeorm';
 import { Post } from '../entity';
 
 export const createPost = async (req: Request, res: Response) => {
@@ -11,7 +12,7 @@ export const createPost = async (req: Request, res: Response) => {
 };
 
 export const getAllPosts = async (_: Request, res: Response) => {
-  const posts = await Post.findAndCount({
+  const posts = await Post.find({
     relations: ['user', 'comments', 'likes'],
     order: { createdAt: 'DESC' },
     take: 10,
@@ -62,7 +63,23 @@ export const deleteOnePost = async (req: Request, res: Response) => {
   if (!isLoggedInUsersPost)
     return res.status(400).json({ error: 'Unauthorized' });
 
-  await post.remove();
+  // await post.remove();
+  // const post2 = await createQueryBuilder('post')
+  //   .leftJoinAndSelect('post.comments', 'comments')
+  //   .where('post.id = :id', { id })
+  //   .getOne();
 
-  return res.json({ message: 'post deleted' });
+  // const post2 = await getRepository(Post)
+  //   .createQueryBuilder('post')
+  //   .leftJoinAndSelect('post.comments', 'comments')
+  //   .where('post.id = :id', { id })
+  //   .getOne();
+  await getConnection()
+    .createQueryBuilder()
+    .delete()
+    .from(Post)
+    .where('_id = :id', { id: 1 })
+    .execute();
+
+  return res.send('deleted');
 };
