@@ -12,6 +12,7 @@ export const toggleLike = async (req: Request, res: Response) => {
   console.log('isLiked ', isLiked);
   if (isLiked) {
     post.likes = post.likes.filter((l) => l.liker !== user.username);
+    post.likesCount = post.likes.length;
     await post.save();
   }
   if (!isLiked) {
@@ -19,6 +20,7 @@ export const toggleLike = async (req: Request, res: Response) => {
     await like.save();
 
     post.likes.unshift(like);
+    post.likesCount = post.likes.length;
     await post.save();
   }
 

@@ -4,13 +4,18 @@ import { Post, Comment } from '../entity';
 export const postComment = async (req: Request, res: Response) => {
   const { pid } = req.params;
   const { body } = req.body;
+  const { user } = res.locals;
   const post = await Post.findOne({ id: pid }, { relations: ['comments'] });
 
   if (!body || body.trim() === '')
     return res.status(400).json({ error: 'body cannot be empty' });
 
   if (!post) return res.status(400).json({ error: 'Post not found' });
-  const comment = Comment.create({ body, commentor: res.locals.user.username });
+  const comment = Comment.create({
+    body,
+    commentor: user.username,
+    postId: post.id,
+  });
 
   await comment.save();
   post.comments.unshift(comment);
@@ -59,6 +64,7 @@ export const deleteComment = async (req: Request, res: Response) => {
 
   if (!post) return res.status(400).json({ error: 'post not found' });
   if (!comment) return res.status(400).json({ error: 'comment not found' });
+
   const postHasComment = post.comments.find((c) => c.id === cid);
   const commentBelongsToLoggedInUser = comment.commentor === user.username;
 
@@ -71,6 +77,7 @@ export const deleteComment = async (req: Request, res: Response) => {
 
   await comment.remove();
   post.commentsCount = post.comments.length - 1;
+  await post.save();
 
   return res.json({ message: 'comment deleted ' });
 };

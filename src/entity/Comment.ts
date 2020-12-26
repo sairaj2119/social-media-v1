@@ -9,12 +9,14 @@ export default class Comment extends Base {
   body: string;
 
   @Column()
-  commentor: string
+  commentor: string;
+
+  @Column()
+  postId: string;
 
   @ManyToOne(() => Post)
-  post: Post
+  post: Post;
 
   @ManyToOne(() => User)
-  user: User
+  user: User;
 }
-
