@@ -1,28 +1,30 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { Card, Button } from 'react-bootstrap';
-import axios from 'axios';
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
 import { Link } from 'react-router-dom';
 import { useHistory } from 'react-router-dom';
 
+import usePosts from '../hooks/usePosts';
+
 dayjs.extend(relativeTime);
 
 const Home = () => {
   const history = useHistory();
-  const [posts, setPosts] = useState([]);
-  useEffect(() => {
-    (async () => {
-      const { data } = await axios.get('http://localhost:5000/posts');
-      console.log(data);
-      setPosts(data);
-    })();
-  }, []);
+  const { isLoading, isError, data, error } = usePosts();
+
+  if (isError) {
+    return <h1>{error.message}</h1>;
+  }
+
+  if (isLoading) {
+    return <h1>Loading...</h1>;
+  }
 
   return (
     <div>
-      {posts.map((post) => (
-        <Card key={post.id}>
+      {data.map((post) => (
+        <Card key={post.id} className='mt-3'>
           <Card.Header>
             <div className='d-flex flex-column'>
               <div as='h5'>{post.user.username}</div>

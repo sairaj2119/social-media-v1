@@ -14,7 +14,7 @@ import likeRoutes from './routes/likeRoutes';
 (async () => {
   const app = express();
 
-  app.use(cors({ origin: 'http://localhost:3000' }));
+  app.use(cors());
   app.use(express.json());
   app.use(morgan('dev'));
   app.use(cookieParser());

@@ -1,26 +1,46 @@
 import React from 'react';
-import { Route, Switch } from 'react-router-dom';
-import { Container } from 'react-bootstrap';
+import { Route, Switch, useHistory } from 'react-router-dom';
+import { Button, Container } from 'react-bootstrap';
+
+import { QueryClient, QueryClientProvider } from 'react-query';
+import { ReactQueryDevtools } from 'react-query/devtools';
 
 import Home from './pages/Home';
 import Header from './components/Header';
 import PostDetail from './pages/PostDetail';
 
+const queryClient = new QueryClient();
+
 const App = () => {
+  const history = useHistory();
   return (
-    <div>
-      <Header />
-      <Container>
-        <div className='row py-3'>
-          <div className='col-lg-9'>
-            <Switch>
-              <Route path='/' exact component={Home} />
-              <Route path='/posts/:pid' exact component={PostDetail} />
-            </Switch>
+    <QueryClientProvider client={queryClient}>
+      <>
+        <Header />
+        <Container>
+          <div className='row py-3 mt-3'>
+            <div className='col-lg-2'>
+              <Button
+                variant='outline-secondary'
+                size='sm'
+                onClick={() => history.goBack()}
+              >
+                Go Back
+              </Button>
+            </div>
           </div>
-        </div>
-      </Container>
-    </div>
+          <div className='row'>
+            <div className='col-lg-9'>
+              <Switch>
+                <Route path='/' exact component={Home} />
+                <Route path='/posts/:pid' exact component={PostDetail} />
+              </Switch>
+            </div>
+          </div>
+        </Container>
+      </>
+      <ReactQueryDevtools initialIsOpen={false} />
+    </QueryClientProvider>
   );
 };
 
