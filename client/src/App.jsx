@@ -8,6 +8,8 @@ import { ReactQueryDevtools } from 'react-query/devtools';
 import Home from './pages/Home';
 import Header from './components/Header';
 import PostDetail from './pages/PostDetail';
+import Login from './pages/Login';
+import Register from './pages/Register';
 
 const queryClient = new QueryClient();
 
@@ -34,6 +36,8 @@ const App = () => {
               <Switch>
                 <Route path='/' exact component={Home} />
                 <Route path='/posts/:pid' exact component={PostDetail} />
+                <Route path='/login' exact component={Login} />
+                <Route path='/register' exact component={Register} />
               </Switch>
             </div>
           </div>
