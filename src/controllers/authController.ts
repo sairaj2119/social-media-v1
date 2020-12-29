@@ -50,7 +50,7 @@ export const loginUser = async (req: Request, res: Response) => {
     })
   );
 
-  return res.send('logged in successfully check your cookies');
+  return res.json(user);
 };
 export const logoutUser = async (_: Request, res: Response) => {
   res.set(

@@ -1,14 +1,16 @@
 import React, { useState } from 'react';
-import { Form, Button } from 'react-bootstrap';
+import { Form, Button, Spinner } from 'react-bootstrap';
 import { useMutation } from 'react-query';
 import { useHistory } from 'react-router-dom';
 import axios from 'axios';
 
 import { useForm } from '../hooks/useForm';
 import { URL } from '../utils/constants';
+import { useUserContext } from '../context/userContext';
 
 const Login = () => {
   const history = useHistory();
+  const [userState, dispatch] = useUserContext();
   const [values, handleChange] = useForm({ email: '', password: '' });
   const [error, setError] = useState('');
 
@@ -17,8 +19,10 @@ const Login = () => {
       return axios.post(`${URL}/auth/login`, values, { withCredentials: true });
     },
     {
-      onSuccess: (data) => {
+      onSuccess: (__response) => {
+        const { data } = __response;
         setError('');
+        dispatch({ type: 'SET_USER', payload: data });
         history.push('/');
         console.log(data);
       },
@@ -28,17 +32,15 @@ const Login = () => {
     }
   );
 
+  console.log('userState is', userState);
+
   const handleLogin = (e) => {
     e.preventDefault();
     mutate(values);
   };
 
-  if (isLoading) {
-    return <h1>This is the puppy song eeee</h1>;
-  }
-
   return (
-    <Form validated={false} className='mt-3' noValidate onSubmit={handleLogin}>
+    <Form className='mt-3' noValidate onSubmit={handleLogin}>
       <h1 className='text-primary mb-4'>Log In</h1>
       <div style={{ maxWidth: '400px', marginRight: 'auto' }}>
         <Form.Group controlId='formBasicEmail'>
@@ -50,7 +52,9 @@ const Login = () => {
             placeholder='Enter email'
             onChange={handleChange}
           />
-          {error && <Form.Text className='text-danger'>{error}</Form.Text>}
+          {error && (
+            <Form.Text className='text-danger'>{`**${error}`}</Form.Text>
+          )}
         </Form.Group>
 
         <Form.Group controlId='formBasicPassword'>
@@ -62,9 +66,21 @@ const Login = () => {
             placeholder='Password'
             onChange={handleChange}
           />
-          {error && <Form.Text className='text-danger'>{error}</Form.Text>}
+          {error && (
+            <Form.Text className='text-danger'>{`**${error}`}</Form.Text>
+          )}
         </Form.Group>
-        <Button variant='primary' type='submit'>
+        <Button variant='primary' disabled={isLoading} type='submit'>
+          {isLoading && (
+            <Spinner
+              as='span'
+              animation='grow'
+              size='sm'
+              role='status'
+              aria-hidden='true'
+              className='mr-2'
+            />
+          )}
           Submit
         </Button>
       </div>
