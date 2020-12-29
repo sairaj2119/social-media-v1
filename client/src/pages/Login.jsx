@@ -19,8 +19,8 @@ const Login = () => {
       return axios.post(`${URL}/auth/login`, values, { withCredentials: true });
     },
     {
-      onSuccess: (__response) => {
-        const { data } = __response;
+      onSuccess: (response) => {
+        const { data } = response;
         setError('');
         dispatch({ type: 'SET_USER', payload: data });
         history.push('/');
