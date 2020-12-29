@@ -1,38 +1,41 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Form, Button, Spinner } from 'react-bootstrap';
 import { useMutation } from 'react-query';
 import { useHistory } from 'react-router-dom';
-import axios from 'axios';
 
+import Axios from '../utils/axios';
 import { useForm } from '../hooks/useForm';
-import { URL } from '../utils/constants';
 import { useUserContext } from '../context/userContext';
 
 const Login = () => {
   const history = useHistory();
-  const [userState, dispatch] = useUserContext();
+  const {
+    userState: { isAuthenticated },
+    dispatch,
+  } = useUserContext();
   const [values, handleChange] = useForm({ email: '', password: '' });
   const [error, setError] = useState('');
 
+  useEffect(() => {
+    if (isAuthenticated) history.push('/');
+  }, [isAuthenticated, history]);
+
   const { mutate, isLoading } = useMutation(
     (values) => {
-      return axios.post(`${URL}/auth/login`, values, { withCredentials: true });
+      return Axios.post(`/auth/login`, values, { withCredentials: true });
     },
     {
       onSuccess: (response) => {
-        const { data } = response;
         setError('');
-        dispatch({ type: 'SET_USER', payload: data });
+        const { data } = response;
+        dispatch('SET_USER', data);
         history.push('/');
-        console.log(data);
       },
       onError: (err) => {
         setError(err.response.data.error);
       },
     }
   );
-
-  console.log('userState is', userState);
 
   const handleLogin = (e) => {
     e.preventDefault();

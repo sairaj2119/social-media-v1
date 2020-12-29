@@ -1,4 +1,6 @@
-import React, { createContext, useContext, useReducer } from 'react';
+import React, { createContext, useContext, useReducer, useEffect } from 'react';
+import Axios from '../utils/axios';
+import { URL } from '../utils/constants';
 
 export const initialState = {
   isAuthenticated: false,
@@ -20,8 +22,21 @@ export const userReducer = (state, action) => {
 export const UserContext = createContext();
 
 export const UserProvider = ({ initialState, reducer, children }) => {
+  const [userState, defaultDispatch] = useReducer(reducer, initialState);
+  const dispatch = (type, payload) => defaultDispatch({ type, payload });
+
+  useEffect(() => {
+    (async () => {
+      try {
+        const { data } = await Axios.get(`/users/me`);
+        dispatch('SET_USER', data);
+      } catch (err) {
+        console.error(err);
+      }
+    })();
+  }, []);
   return (
-    <UserContext.Provider value={useReducer(reducer, initialState)}>
+    <UserContext.Provider value={{ userState, dispatch }}>
       {children}
     </UserContext.Provider>
   );

@@ -1,10 +1,8 @@
 import { useQuery } from 'react-query';
-import axios from 'axios';
-
-import { URL } from '../utils/constants';
+import Axios from '../utils/axios';
 
 const getPosts = async () => {
-  const { data } = await axios.get(`${URL}/posts`);
+  const { data } = await Axios.get(`/posts`);
   return data;
 };
 

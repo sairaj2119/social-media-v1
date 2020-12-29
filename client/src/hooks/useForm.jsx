@@ -6,7 +6,6 @@ export const useForm = (initialValues) => {
   return [
     values,
     (e) => {
-      console.log('inside the hook', e.target.value);
       setvalues({
         ...values,
         [e.target.name]: e.target.value,

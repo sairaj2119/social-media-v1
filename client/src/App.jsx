@@ -11,6 +11,7 @@ import Register from './pages/Register';
 
 const App = () => {
   const history = useHistory();
+
   return (
     <>
       <Header />
