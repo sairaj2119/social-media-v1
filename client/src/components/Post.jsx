@@ -1,14 +1,42 @@
 import React from 'react';
-import { Card, Button } from 'react-bootstrap';
-import { useHistory } from 'react-router-dom';
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
-import { Link } from 'react-router-dom';
+import { Card, Button } from 'react-bootstrap';
+import { useHistory } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
+import { useMutation, useQueryClient } from 'react-query';
+
+import Axios from '../utils/axios';
 
 dayjs.extend(relativeTime);
 
 const Post = ({ post }) => {
+  const queryClient = useQueryClient();
+  const { pathname } = useLocation();
   const history = useHistory();
+  const { mutate } = useMutation(
+    (postId) => {
+      return Axios.get(`/like/${postId}`);
+    },
+    {
+      onSuccess: (response) => {
+        const { data } = response;
+        if (pathname === '/') {
+          queryClient.invalidateQueries('posts');
+        }
+        if (pathname === `/posts/${data.id}`) {
+          queryClient.invalidateQueries(['post', data.id]);
+        }
+        console.log('post liked');
+        console.log(data);
+      },
+    }
+  );
+
+  const handleLike = async () => {
+    mutate(post.id);
+  };
+
   return (
     <Card key={post.id} className='mt-3'>
       <Card.Header>
@@ -26,7 +54,7 @@ const Post = ({ post }) => {
           {post.title}
         </Card.Title>
         <Card.Text>{post.body}</Card.Text>
-        <Card.Link>
+        <Card.Link onClick={handleLike}>
           <Button variant='primary'>
             <span className='mr-1'>{post.likesCount}</span>{' '}
             <i className='fas fa-thumbs-up'></i>

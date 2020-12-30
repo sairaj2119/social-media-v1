@@ -4,7 +4,6 @@ import { Container, Nav, Navbar } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 
 import { useUserContext } from '../context/userContext';
-import { URL } from '../utils/constants';
 
 const Header = () => {
   const {

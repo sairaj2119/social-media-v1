@@ -9,13 +9,9 @@ const PostDetail = () => {
   const { pid } = useParams();
   const { isLoading, isError, data: post, error } = usePost(pid);
 
-  if (isError) {
-    return <h1>{error.message}</h1>;
-  }
+  if (isError) return <h1>{error.message}</h1>;
 
-  if (isLoading) {
-    return <h1>Loading...</h1>;
-  }
+  if (isLoading) return <h1>Loading...</h1>;
 
   return (
     <>
