@@ -7,13 +7,19 @@ import { Link, useLocation } from 'react-router-dom';
 import { useMutation, useQueryClient } from 'react-query';
 
 import Axios from '../utils/axios';
+import { useUserContext } from '../context/userContext';
 
 dayjs.extend(relativeTime);
 
 const Post = ({ post }) => {
-  const queryClient = useQueryClient();
   const { pathname } = useLocation();
+  const queryClient = useQueryClient();
   const history = useHistory();
+
+  const {
+    userState: { isAuthenticated },
+  } = useUserContext();
+
   const { mutate } = useMutation(
     (postId) => {
       return Axios.get(`/like/${postId}`);
@@ -27,13 +33,12 @@ const Post = ({ post }) => {
         if (pathname === `/posts/${data.id}`) {
           queryClient.invalidateQueries(['post', data.id]);
         }
-        console.log('post liked');
-        console.log(data);
       },
     }
   );
 
   const handleLike = async () => {
+    if (!isAuthenticated) history.push('/login?redirect=puppy');
     mutate(post.id);
   };
 
@@ -56,7 +61,7 @@ const Post = ({ post }) => {
         <Card.Text>{post.body}</Card.Text>
         <Card.Link onClick={handleLike}>
           <Button variant='primary'>
-            <span className='mr-1'>{post.likesCount}</span>{' '}
+            <span className='mr-1'>{post.likesCount}</span>
             <i className='fas fa-thumbs-up'></i>
           </Button>
         </Card.Link>

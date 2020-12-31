@@ -79,5 +79,19 @@ export const deleteComment = async (req: Request, res: Response) => {
   post.commentsCount = post.comments.length - 1;
   await post.save();
 
-  return res.json({ message: 'comment deleted ' });
+  return res.json({ message: 'comment deleted' });
+};
+
+export const getCommentsOfPost = async (req: Request, res: Response) => {
+  const { pid } = req.params;
+
+  const post = await Post.findOne({ id: pid });
+  if (!post) return res.status(400).json({ error: 'post not found' });
+
+  const comments = await Comment.find({
+    where: { postId: pid },
+    order: { createdAt: 'DESC' },
+  });
+
+  return res.json(comments);
 };

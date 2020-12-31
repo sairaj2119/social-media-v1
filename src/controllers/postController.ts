@@ -13,7 +13,7 @@ export const createPost = async (req: Request, res: Response) => {
 
 export const getAllPosts = async (_: Request, res: Response) => {
   const posts = await Post.find({
-    relations: ['user', 'comments', 'likes'],
+    relations: ['user', 'likes'],
     order: { createdAt: 'DESC' },
     take: 10,
   });
@@ -24,7 +24,7 @@ export const getAllPosts = async (_: Request, res: Response) => {
 export const getOnePost = async (req: Request, res: Response) => {
   const id = req.params.id;
 
-  const post = await Post.findOne({ id }, { relations: ['user', 'comments'] });
+  const post = await Post.findOne({ id }, { relations: ['user', 'likes'] });
   if (!post) {
     return res.status(400).json({ error: 'Post not found' });
   }

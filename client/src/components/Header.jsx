@@ -10,7 +10,6 @@ const Header = () => {
     userState: { isAuthenticated },
     dispatch,
   } = useUserContext();
-  console.log('isAuthenticated is', isAuthenticated);
   const handleLogout = async () => {
     dispatch('UNSET_USER');
     try {

@@ -16,7 +16,7 @@ const PostDetail = () => {
   return (
     <>
       <Post post={post} />
-      <Comments />
+      <Comments postId={post.id} />
     </>
   );
 };

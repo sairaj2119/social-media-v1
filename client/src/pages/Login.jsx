@@ -15,10 +15,12 @@ const Login = () => {
   } = useUserContext();
   const [values, handleChange] = useForm({ email: '', password: '' });
   const [error, setError] = useState('');
+  const { location } = history;
+  const redirect = location.search.split('=')[1] || '';
 
   useEffect(() => {
-    if (isAuthenticated) history.push('/');
-  }, [isAuthenticated, history]);
+    if (isAuthenticated) history.push(`/${redirect}`);
+  }, [isAuthenticated, history, redirect]);
 
   const { mutate, isLoading } = useMutation(
     (values) => {
@@ -29,7 +31,7 @@ const Login = () => {
         setError('');
         const { data } = response;
         dispatch('SET_USER', data);
-        history.push('/');
+        history.push(`/${redirect}`);
       },
       onError: (err) => {
         setError(err.response.data.error);

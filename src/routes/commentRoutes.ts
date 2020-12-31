@@ -4,6 +4,7 @@ import {
   deleteComment,
   postComment,
   editComment,
+  getCommentsOfPost,
 } from '../controllers/commentController';
 import { auth } from '../middlewares/auth';
 
@@ -11,6 +12,6 @@ const router = Router();
 
 router.route('/:pid/:cid').put(auth, editComment).delete(auth, deleteComment);
 
-router.post('/:pid', auth, postComment);
+router.route('/:pid').get(getCommentsOfPost).post(auth, postComment);
 
 export default router;
