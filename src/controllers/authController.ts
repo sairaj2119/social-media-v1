@@ -21,7 +21,11 @@ export const registerUser = async (req: Request, res: Response) => {
   errors = await validate(user);
 
   if (Object.keys(errors).length > 0) {
-    return res.status(400).json(errors);
+    const sendErrors: any = {};
+    errors.forEach((err: any) => {
+      sendErrors[err.property] = Object.values(err.constraints)[0];
+    });
+    return res.status(400).json(sendErrors);
   }
   await user.save();
 

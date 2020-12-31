@@ -23,7 +23,6 @@ const Comments = ({ postId }) => {
       return data;
     }
   );
-
   const { mutate, isLoading: mIsLoading } = useMutation(
     ({ body }) => {
       return Axios.post(`/comments/${postId}`, { body });
@@ -36,10 +35,6 @@ const Comments = ({ postId }) => {
       },
     }
   );
-
-  if (isLoading) return <h1>Loading...</h1>;
-  if (isError) return <h1>Error: {error.message}</h1>;
-
   const handleComment = (e) => {
     e.preventDefault();
     if (!isAuthenticated)
@@ -50,6 +45,9 @@ const Comments = ({ postId }) => {
     if (!isAuthenticated)
       return history.push(`/login?redirect=posts/${postId}`);
   };
+
+  if (isLoading) return <h1>Loading...</h1>;
+  if (isError) return <h1>Error: {error.message}</h1>;
   return (
     <>
       <Form inline className='pt-3' onSubmit={handleComment}>
