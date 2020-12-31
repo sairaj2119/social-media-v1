@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button, Form, ListGroup } from 'react-bootstrap';
+import { Button, Form, ListGroup, Spinner } from 'react-bootstrap';
 import { useMutation, useQuery, useQueryClient } from 'react-query';
 import { useHistory } from 'react-router-dom';
 
@@ -24,7 +24,7 @@ const Comments = ({ postId }) => {
     }
   );
 
-  const { mutate } = useMutation(
+  const { mutate, isLoading: mIsLoading } = useMutation(
     ({ body }) => {
       return Axios.post(`/comments/${postId}`, { body });
     },
@@ -70,6 +70,16 @@ const Comments = ({ postId }) => {
           className='mb-2'
           disabled={values.comment.trim() === ''}
         >
+          {mIsLoading && (
+            <Spinner
+              as='span'
+              animation='grow'
+              size='sm'
+              role='status'
+              aria-hidden='true'
+              className='mr-2'
+            />
+          )}
           Submit
         </Button>
       </Form>
