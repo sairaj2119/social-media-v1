@@ -1,6 +1,6 @@
 import Axios from '../utils/axios';
 import React from 'react';
-import { Container, Nav, Navbar } from 'react-bootstrap';
+import { Container, Dropdown, Nav, Navbar } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 
 import { useUserContext } from '../context/userContext';
@@ -41,10 +41,22 @@ const Header = () => {
                 <Nav.Link as={Link} to='/new/post'>
                   Add a post
                 </Nav.Link>
-                <Nav.Link as={Link} to='/profile'>
-                  Profile
-                </Nav.Link>
-                <Nav.Link onClick={handleLogout}>Logout</Nav.Link>
+                <Dropdown>
+                  <Dropdown.Toggle
+                    variant='parimary'
+                    id='dropdown-basic'
+                    style={{ color: 'white' }}
+                  >
+                    <i className='fas fa-cog'></i>
+                  </Dropdown.Toggle>
+
+                  <Dropdown.Menu>
+                    <Dropdown.Item as={Link} to='/profile'>
+                      Profile
+                    </Dropdown.Item>
+                    <Dropdown.Item onClick={handleLogout}>Logout</Dropdown.Item>
+                  </Dropdown.Menu>
+                </Dropdown>
               </>
             )}
           </Nav>

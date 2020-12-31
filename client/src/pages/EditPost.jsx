@@ -1,45 +1,53 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import { Button, Form } from 'react-bootstrap';
 import { useMutation } from 'react-query';
-import { useHistory } from 'react-router-dom';
+import { useHistory, useParams } from 'react-router-dom';
 
-import { useForm } from '../hooks/useForm';
+import usePost from '../hooks/usePost';
 import Axios from '../utils/axios';
 
 const CreatePost = () => {
   const history = useHistory();
-  const [values, handleChange] = useForm({ title: '', body: '' });
+  const { pid } = useParams();
+  const titleRef = useRef();
+  const bodyRef = useRef();
+  const { isLoading, isError, data: post, error } = usePost(pid);
 
   const { mutate } = useMutation(
     (values) => {
-      return Axios.post('/posts', values);
+      return Axios.put(`/posts/${pid}`, values);
     },
     {
       onSuccess: () => {
         history.push('/');
+        console.log('successfully updated');
       },
     }
   );
 
-  const handlePostCreate = (e) => {
+  const handlePostEdit = (e) => {
     e.preventDefault();
-    mutate(values);
+    mutate({ title: titleRef.current.value, body: bodyRef.current.value });
   };
+
+  if (isError) return <h1>{error.message}</h1>;
+
+  if (isLoading) return <h1>Loading...</h1>;
 
   return (
     <Form
       className='mt-3'
-      onSubmit={handlePostCreate}
+      onSubmit={handlePostEdit}
       style={{ maxWidth: '500px', marginRight: 'auto' }}
     >
       <Form.Group controlId='formBasicEmail'>
         <Form.Label>Title</Form.Label>
         <Form.Control
+          ref={titleRef}
           name='title'
           type='text'
           placeholder='Enter title'
-          value={values.title}
-          onChange={handleChange}
+          defaultValue={post.title}
         />
       </Form.Group>
 
@@ -49,15 +57,11 @@ const CreatePost = () => {
           name='body'
           as='textarea'
           rows={5}
-          value={values.body}
-          onChange={handleChange}
+          ref={bodyRef}
+          defaultValue={post.body}
         />
       </Form.Group>
-      <Button
-        variant='primary'
-        type='submit'
-        disabled={values.title.trim() === '' || values.body.trim() === ''}
-      >
+      <Button variant='primary' type='submit'>
         Post
       </Button>
     </Form>
