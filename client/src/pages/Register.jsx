@@ -33,23 +33,18 @@ const Register = () => {
       return Axios.post(`/auth/register`, values);
     },
     {
-      onSuccess: (response) => {
+      onSuccess: () => {
         setErrors({ username: '', email: '', password: '' });
-        const { data } = response;
-        console.log(data);
         history.push(`/login`);
       },
       onError: (err) => {
-        console.log('before update', errors);
         setErrors({ ...errors, ...err.response.data });
-        console.log('after update', errors);
       },
     }
   );
 
   const handleSignup = (e) => {
     e.preventDefault();
-    console.log(values);
     mutate(values);
   };
 

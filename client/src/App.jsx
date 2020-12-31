@@ -8,6 +8,7 @@ import Header from './components/Header';
 import PostDetail from './pages/PostDetail';
 import Login from './pages/Login';
 import Register from './pages/Register';
+import CreatePost from './pages/CreatePost';
 
 const App = () => {
   const history = useHistory();
@@ -38,6 +39,7 @@ const App = () => {
               <Route path='/posts/:pid' exact component={PostDetail} />
               <Route path='/login' exact component={Login} />
               <Route path='/register' exact component={Register} />
+              <Route path='/new/post' exact component={CreatePost} />
             </Switch>
           </div>
         </div>

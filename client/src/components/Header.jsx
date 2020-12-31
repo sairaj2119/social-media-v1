@@ -38,6 +38,9 @@ const Header = () => {
               </>
             ) : (
               <>
+                <Nav.Link as={Link} to='/new/post'>
+                  Add a post
+                </Nav.Link>
                 <Nav.Link as={Link} to='/profile'>
                   Profile
                 </Nav.Link>
