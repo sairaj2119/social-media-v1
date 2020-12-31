@@ -19,7 +19,6 @@ const Register = () => {
   });
 
   const [errors, setErrors] = useState({});
-  const [confirmPassError, setConfirmPassError] = useState('');
   const { location } = history;
   const redirect = location.search.split('=')[1] || '';
 
@@ -34,11 +33,6 @@ const Register = () => {
       return Axios.post(`/auth/register`, values);
     },
     {
-      onMutate: () => {
-        if (values.password !== values.confirmPassword) {
-          setConfirmPassError('passwords do not match');
-        }
-      },
       onSuccess: (response) => {
         setErrors({ username: '', email: '', password: '' });
         const { data } = response;
@@ -105,19 +99,6 @@ const Register = () => {
           )}
         </Form.Group>
 
-        <Form.Group controlId='formBasicConfirmPassword'>
-          <Form.Label>Confirm password</Form.Label>
-          <Form.Control
-            type='password'
-            name='confirmPassword'
-            value={values.confirmPassword}
-            onChange={handleChange}
-            placeholder='Password'
-          />
-          {confirmPassError && (
-            <Form.Text className='text-danger'>{`**${confirmPassError}`}</Form.Text>
-          )}
-        </Form.Group>
         <Button variant='primary' type='submit'>
           {isLoading && (
             <Spinner
