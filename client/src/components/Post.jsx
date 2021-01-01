@@ -38,7 +38,7 @@ const Post = ({ post }) => {
   );
 
   const handleLike = async () => {
-    if (!isAuthenticated) history.push('/login?redirect=puppy');
+    if (!isAuthenticated) history.push('/login?redirect=');
     mutate(post.id);
   };
 

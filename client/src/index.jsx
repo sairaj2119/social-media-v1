@@ -5,6 +5,7 @@ import { UserProvider, initialState, userReducer } from './context/userContext';
 import { QueryClient, QueryClientProvider } from 'react-query';
 
 import './bootstrap.min.css';
+import './index.css';
 import App from './App';
 
 const queryClient = new QueryClient();

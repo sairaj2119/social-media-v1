@@ -6,6 +6,7 @@ import {
   Col,
   InputGroup,
   FormControl,
+  Dropdown,
 } from 'react-bootstrap';
 import { useMutation, useQueryClient } from 'react-query';
 import dayjs from 'dayjs';
@@ -70,7 +71,7 @@ const Comment = ({ comment: { commentor, body, createdAt, id }, postId }) => {
   return (
     <ListGroup.Item>
       <Row>
-        <Col sm={10}>
+        <Col sm={11}>
           <div className='d-flex align-items-center'>
             <h5 className='text-success mb-0 mr-2'>{commentor}</h5>
             <p className='m-0 text-muted'>
@@ -96,43 +97,33 @@ const Comment = ({ comment: { commentor, body, createdAt, id }, postId }) => {
                 <Button variant='outline-success' onClick={handleCommentEdit}>
                   <i className='fas fa-check'></i>
                 </Button>
-                <Button
-                  variant='outline-warning'
-                  onClick={() => setEdit(false)}
-                >
+                <Button variant='outline-danger' onClick={() => setEdit(false)}>
                   <i className='fas fa-times'></i>
                 </Button>
               </InputGroup.Append>
             </InputGroup>
           )}
         </Col>
-        {user?.username === commentor && (
-          <>
-            <Col sm={1}>
-              {!edit && (
-                <Button
-                  variant='outline-info'
-                  size='sm'
-                  className='mr-2'
-                  onClick={() => {
-                    setEdit(true);
-                  }}
-                >
-                  <i className='far fa-edit'></i>
-                </Button>
-              )}
-            </Col>
-            <Col sm={1}>
-              <Button
-                variant='outline-danger'
-                size='sm'
-                onClick={handleCommentDelete}
-              >
-                <i className='far fa-trash-alt'></i>
-              </Button>
-            </Col>
-          </>
-        )}
+        <Col sm={1}>
+          {user?.username === commentor && (
+            <Dropdown>
+              <Dropdown.Toggle variant='link' id='dropdown-basic'>
+                <i className='fas fa-ellipsis-v'></i>
+              </Dropdown.Toggle>
+
+              <Dropdown.Menu>
+                {!edit && (
+                  <Dropdown.Item onClick={() => setEdit(true)}>
+                    Edit
+                  </Dropdown.Item>
+                )}
+                <Dropdown.Item onClick={handleCommentDelete}>
+                  Remove
+                </Dropdown.Item>
+              </Dropdown.Menu>
+            </Dropdown>
+          )}
+        </Col>
       </Row>
     </ListGroup.Item>
   );

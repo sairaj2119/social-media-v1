@@ -1,6 +1,13 @@
 import Axios from '../utils/axios';
 import React from 'react';
-import { Container, Dropdown, Nav, Navbar } from 'react-bootstrap';
+import {
+  Container,
+  Dropdown,
+  Nav,
+  Navbar,
+  OverlayTrigger,
+  Tooltip,
+} from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 
 import { useUserContext } from '../context/userContext';
@@ -39,7 +46,13 @@ const Header = () => {
             ) : (
               <>
                 <Nav.Link as={Link} to='/new/post'>
-                  Add a post
+                  <OverlayTrigger
+                    placement='bottom'
+                    style={{ marginTop: '1rem' }}
+                    overlay={<Tooltip id='tooltip-add-post'>Add Post</Tooltip>}
+                  >
+                    <i className='fas fa-plus'></i>
+                  </OverlayTrigger>
                 </Nav.Link>
                 <Dropdown>
                   <Dropdown.Toggle
