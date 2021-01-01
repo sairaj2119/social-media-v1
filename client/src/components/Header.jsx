@@ -13,7 +13,7 @@ import { useUserContext } from '../context/userContext';
 
 const Header = () => {
   const {
-    userState: { isAuthenticated },
+    userState: { isAuthenticated, user },
     dispatch,
   } = useUserContext();
   const handleLogout = async () => {
@@ -44,30 +44,43 @@ const Header = () => {
               </>
             ) : (
               <>
-                <Nav.Link as={Link} to='/new/post'>
+                <Nav.Link as={Link} to='/' className='navbar__items'>
+                  <OverlayTrigger
+                    placement='bottom'
+                    overlay={<Tooltip id='tooltip-add-post'>Home</Tooltip>}
+                  >
+                    <i className='fas fa-home icon'></i>
+                  </OverlayTrigger>
+                </Nav.Link>
+
+                <Nav.Link as={Link} to='/new/post' className='navbar__items'>
                   <OverlayTrigger
                     placement='bottom'
                     overlay={<Tooltip id='tooltip-add-post'>Add Post</Tooltip>}
                   >
-                    <i className='fas fa-plus'></i>
+                    <i className='fas fa-plus icon'></i>
                   </OverlayTrigger>
                 </Nav.Link>
 
-                <Nav.Link as={Link} to='/profile'>
+                <Nav.Link
+                  as={Link}
+                  to={`/profile/${user.username}`}
+                  className='navbar__items'
+                >
                   <OverlayTrigger
                     placement='bottom'
                     overlay={<Tooltip id='tooltip-add-post'>Profile</Tooltip>}
                   >
-                    <i className='fas fa-user'></i>
+                    <i className='fas fa-user icon'></i>
                   </OverlayTrigger>
                 </Nav.Link>
 
-                <Nav.Link onClick={handleLogout}>
+                <Nav.Link onClick={handleLogout} className='navbar__items'>
                   <OverlayTrigger
                     placement='bottom'
                     overlay={<Tooltip id='tooltip-add-post'>Logout</Tooltip>}
                   >
-                    <i className='fas fa-sign-out-alt'></i>
+                    <i className='fas fa-sign-out-alt icon'></i>
                   </OverlayTrigger>
                 </Nav.Link>
               </>

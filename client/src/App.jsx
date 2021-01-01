@@ -1,6 +1,6 @@
 import React from 'react';
-import { Route, Switch, useHistory, useLocation } from 'react-router-dom';
-import { Button, Container } from 'react-bootstrap';
+import { Route, Switch } from 'react-router-dom';
+import { Container } from 'react-bootstrap';
 import { ReactQueryDevtools } from 'react-query/devtools';
 
 import Home from './pages/Home';
@@ -10,19 +10,18 @@ import Login from './pages/Login';
 import Register from './pages/Register';
 import CreatePost from './pages/CreatePost';
 import EditPost from './pages/EditPost';
-import PrivateRoute from './components/PrivateRoute';
 import Profile from './pages/Profile';
 
 const App = () => {
-  const history = useHistory();
-  const { pathname } = useLocation();
-  const paths = ['/', '/profile'];
+  // const history = useHistory();
+  // const { pathname } = useLocation();
+  // const paths = ['/', '/profile'];
 
   return (
     <>
       <Header />
       <Container>
-        {!paths.includes(pathname) && (
+        {/* {!paths.includes(pathname) && (
           <div className='row py-3 mt-3'>
             <div className='col-lg-2'>
               <Button
@@ -34,7 +33,7 @@ const App = () => {
               </Button>
             </div>
           </div>
-        )}
+        )} */}
         <div className='row'>
           <div className='col-lg-9'>
             <Switch>
@@ -50,9 +49,7 @@ const App = () => {
         </div>
         <div className='row'>
           <div className='col-lg-12'>
-            <Switch>
-              <Route path='/profile' exact component={Profile} />
-            </Switch>
+            <Route path='/profile/:username' component={Profile} />
           </div>
         </div>
       </Container>

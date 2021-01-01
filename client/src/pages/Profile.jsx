@@ -7,18 +7,18 @@ import {
   OverlayTrigger,
   Tooltip,
 } from 'react-bootstrap';
+import { useParams } from 'react-router-dom';
 
-import { useUserContext } from '../context/userContext';
+import useUserQuery from '../hooks/useUserQuery';
 
 const bio = `Full-stack web developer | Instructor 👨‍🏫,I am limitless 🌻,Happiness is my goal ❤️,Power of HUSTLE is real 💪`;
 
 const Profile = () => {
-  const {
-    userState: { user },
-  } = useUserContext();
+  const { username } = useParams();
+  const { data: user, isLoading, isError, error } = useUserQuery(username);
 
-  if (!user) return <h1>Loading...</h1>;
-  console.log(bio.split(','));
+  if (isError) return <h1>{error.message}...</h1>;
+  if (isLoading) return <h1>Loading...</h1>;
 
   return (
     <div className='mt-4'>
@@ -74,6 +74,9 @@ const Profile = () => {
             </Col>
           </Row>
         </Col>
+      </Row>
+      <Row className='mt-5'>
+        <Col xs={12}>asdfasdf</Col>
       </Row>
     </div>
   );
