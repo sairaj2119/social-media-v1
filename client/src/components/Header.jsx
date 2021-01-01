@@ -2,7 +2,6 @@ import Axios from '../utils/axios';
 import React from 'react';
 import {
   Container,
-  Dropdown,
   Nav,
   Navbar,
   OverlayTrigger,
@@ -48,28 +47,29 @@ const Header = () => {
                 <Nav.Link as={Link} to='/new/post'>
                   <OverlayTrigger
                     placement='bottom'
-                    style={{ marginTop: '1rem' }}
                     overlay={<Tooltip id='tooltip-add-post'>Add Post</Tooltip>}
                   >
                     <i className='fas fa-plus'></i>
                   </OverlayTrigger>
                 </Nav.Link>
-                <Dropdown>
-                  <Dropdown.Toggle
-                    variant='parimary'
-                    id='dropdown-basic'
-                    style={{ color: 'white' }}
-                  >
-                    <i className='fas fa-cog'></i>
-                  </Dropdown.Toggle>
 
-                  <Dropdown.Menu>
-                    <Dropdown.Item as={Link} to='/profile'>
-                      Profile
-                    </Dropdown.Item>
-                    <Dropdown.Item onClick={handleLogout}>Logout</Dropdown.Item>
-                  </Dropdown.Menu>
-                </Dropdown>
+                <Nav.Link as={Link} to='/profile'>
+                  <OverlayTrigger
+                    placement='bottom'
+                    overlay={<Tooltip id='tooltip-add-post'>Profile</Tooltip>}
+                  >
+                    <i className='fas fa-user'></i>
+                  </OverlayTrigger>
+                </Nav.Link>
+
+                <Nav.Link onClick={handleLogout}>
+                  <OverlayTrigger
+                    placement='bottom'
+                    overlay={<Tooltip id='tooltip-add-post'>Logout</Tooltip>}
+                  >
+                    <i className='fas fa-sign-out-alt'></i>
+                  </OverlayTrigger>
+                </Nav.Link>
               </>
             )}
           </Nav>

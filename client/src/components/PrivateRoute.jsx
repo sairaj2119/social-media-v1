@@ -4,15 +4,20 @@ import { Redirect, Route } from 'react-router-dom';
 import { useUserContext } from '../context/userContext';
 
 const PrivateRoute = ({ component: Component, ...rest }) => {
-  const {
-    userState: { isAuthenticated },
-  } = useUserContext();
-
+  const { userState } = useUserContext();
+  console.log(userState);
+  if (!userState) {
+    console.log('user still is not loaded');
+  }
   return (
     <Route
       {...rest}
       render={(props) =>
-        !isAuthenticated ? <Redirect to='/login' /> : <Component {...props} />
+        userState.isAuthenticated === false ? (
+          <Redirect to='/login' />
+        ) : (
+          <Component {...props} />
+        )
       }
     />
   );

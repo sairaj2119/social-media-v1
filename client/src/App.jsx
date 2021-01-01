@@ -11,11 +11,12 @@ import Register from './pages/Register';
 import CreatePost from './pages/CreatePost';
 import EditPost from './pages/EditPost';
 import PrivateRoute from './components/PrivateRoute';
+import Profile from './pages/Profile';
 
 const App = () => {
   const history = useHistory();
   const { pathname } = useLocation();
-  const paths = ['/'];
+  const paths = ['/', '/profile'];
 
   return (
     <>
@@ -41,13 +42,16 @@ const App = () => {
               <Route path='/posts/:pid' exact component={PostDetail} />
               <Route path='/login' exact component={Login} />
               <Route path='/register' exact component={Register} />
-              <PrivateRoute path='/new/post' exact component={CreatePost} />
-              <PrivateRoute
-                path='/edit/posts/:pid'
-                exact
-                component={EditPost}
-              />
+              <Route path='/new/post' exact component={CreatePost} />
+              <Route path='/edit/posts/:pid' exact component={EditPost} />
               <Route />
+            </Switch>
+          </div>
+        </div>
+        <div className='row'>
+          <div className='col-lg-12'>
+            <Switch>
+              <Route path='/profile' exact component={Profile} />
             </Switch>
           </div>
         </div>
