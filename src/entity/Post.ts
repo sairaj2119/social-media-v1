@@ -25,6 +25,6 @@ export default class Post extends Base {
   @OneToMany(() => Like, (like) => like.post)
   likes: Like[];
 
-  @ManyToOne(() => User)
+  @ManyToOne(() => User, (user) => user.posts)
   user: User;
 }

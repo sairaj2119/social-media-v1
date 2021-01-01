@@ -1,4 +1,5 @@
 import { Request, Response } from 'express';
+import { createQueryBuilder } from 'typeorm';
 // import { getConnection } from 'typeorm';
 import { Post } from '../entity';
 
@@ -11,12 +12,21 @@ export const createPost = async (req: Request, res: Response) => {
   return res.json(post);
 };
 
-export const getAllPosts = async (_: Request, res: Response) => {
-  const posts = await Post.find({
-    relations: ['user', 'likes'],
-    order: { createdAt: 'DESC' },
-    take: 10,
-  });
+export const getAllPosts = async (req: Request, res: Response) => {
+  const { username } = req.query;
+  let posts: Post[] = [];
+  console.log(username);
+  let queryBuilder = createQueryBuilder(Post, 'post')
+    .innerJoinAndSelect('post.user', 'user')
+    .orderBy('post.createdAt', 'DESC');
+
+  if (username) {
+    queryBuilder = queryBuilder.where('user.username = :username', {
+      username,
+    });
+  }
+
+  posts = await queryBuilder.getMany();
 
   return res.json(posts);
 };
