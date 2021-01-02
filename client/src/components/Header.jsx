@@ -35,10 +35,10 @@ const Header = () => {
           <Nav className='ml-auto'>
             {!isAuthenticated ? (
               <>
-                <Nav.Link as={Link} to='/register'>
+                <Nav.Link className='navbar__items' as={Link} to='/register'>
                   Sign Up
                 </Nav.Link>
-                <Nav.Link as={Link} to='/login'>
+                <Nav.Link className='navbar__items' as={Link} to='/login'>
                   Log In
                 </Nav.Link>
               </>
