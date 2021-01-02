@@ -1,22 +1,46 @@
 import React from 'react';
-import { Row, Col } from 'react-bootstrap';
+import { Row, Col, Card } from 'react-bootstrap';
+import { useHistory } from 'react-router-dom';
+import dayjs from 'dayjs';
+import relativeTime from 'dayjs/plugin/relativeTime';
 
-import useUserPostsQuery from '../hooks/useUserPostsQuery';
-import Post from '../components/Post';
+dayjs.extend(relativeTime);
 
-const ProfileUserPosts = ({ user }) => {
-  const { data: posts, isLoading, isError, error } = useUserPostsQuery(
-    user.username
-  );
-
-  if (isLoading) return <h1>Loading</h1>;
-  if (isError) return <h1>Error: {error.message}</h1>;
+const ProfileUserPosts = ({ posts }) => {
+  const history = useHistory();
 
   return (
     <Row className='mt-5'>
       {posts.map((post) => (
         <Col sm={12} md={6}>
-          <Post post={post} />
+          <Card key={post.id} className='mt-3'>
+            <Card.Header>
+              <div className='d-flex flex-column'>
+                <div as='h5'>{post.user.username}</div>
+                <div className='text-muted'>
+                  {dayjs(post.createdAt).fromNow()}
+                </div>
+              </div>
+            </Card.Header>
+            <Card.Body>
+              <Card.Title
+                style={{ cursor: 'pointer' }}
+                onClick={() => history.push(`/posts/${post.id}`)}
+                as='h3'
+              >
+                {post.title}
+              </Card.Title>
+              <Card.Text>{post.body}</Card.Text>
+              <Card.Link>
+                <strong className='mr-1'>{post.likesCount}</strong>
+                likes
+              </Card.Link>
+              <Card.Link>
+                <strong className='mr-1'>{post.commentsCount}</strong>
+                comments
+              </Card.Link>
+            </Card.Body>
+          </Card>
         </Col>
       ))}
     </Row>

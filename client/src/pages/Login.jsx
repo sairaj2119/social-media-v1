@@ -6,6 +6,7 @@ import { useHistory } from 'react-router-dom';
 import Axios from '../utils/axios';
 import { useForm } from '../hooks/useForm';
 import { useUserContext } from '../context/userContext';
+import LoadingButton from '../components/LoadingButton';
 
 const Login = () => {
   const history = useHistory();
@@ -75,19 +76,9 @@ const Login = () => {
             <Form.Text className='text-danger'>{`**${error}`}</Form.Text>
           )}
         </Form.Group>
-        <Button variant='primary' disabled={isLoading} type='submit'>
-          {isLoading && (
-            <Spinner
-              as='span'
-              animation='grow'
-              size='sm'
-              role='status'
-              aria-hidden='true'
-              className='mr-2'
-            />
-          )}
+        <LoadingButton isLoading={isLoading} onClick={handleLogin}>
           Submit
-        </Button>
+        </LoadingButton>
       </div>
     </Form>
   );

@@ -1,12 +1,6 @@
 import React from 'react';
-import {
-  Row,
-  Col,
-  Image,
-  Button,
-  OverlayTrigger,
-  Tooltip,
-} from 'react-bootstrap';
+import { Row, Col, Image } from 'react-bootstrap';
+import LoadingButton from './LoadingButton';
 
 const bio = `Full-stack web developer | Instructor 👨‍🏫,I am limitless 🌻,Happiness is my goal ❤️,Power of HUSTLE is real 💪`;
 
@@ -21,19 +15,13 @@ const ProfileUserInfo = ({ user }) => {
           />
         </div>
       </Col>
+
       <Col xs={12} md={6}>
-        <div className='d-flex align-items-center'>
-          <h2>{user.username}</h2>
-          <OverlayTrigger
-            placement='bottom'
-            overlay={
-              <Tooltip id={`tooltip-edit-profile`}>Edit Profile</Tooltip>
-            }
-          >
-            <Button variant='link' className='ml-2'>
-              <i className='far fa-edit' style={{ fontSize: '1.25rem' }}></i>
-            </Button>
-          </OverlayTrigger>
+        <div className='d-flex align-items-center mb-2'>
+          <h2 className='m-0'>{user.username}</h2>
+          <LoadingButton variant='success' className='ml-5'>
+            Follow
+          </LoadingButton>
         </div>
         <Row>
           <Col xs={12} md={8} className='my-2'>

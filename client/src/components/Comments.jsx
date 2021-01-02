@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button, Form, ListGroup, Spinner } from 'react-bootstrap';
+import { Form, ListGroup } from 'react-bootstrap';
 import { useMutation, useQuery, useQueryClient } from 'react-query';
 import { useHistory } from 'react-router-dom';
 
@@ -7,6 +7,7 @@ import { useUserContext } from '../context/userContext';
 import { useForm } from '../hooks/useForm';
 import Axios from '../utils/axios';
 import Comment from './Comment';
+import LoadingButton from './LoadingButton';
 
 const Comments = ({ postId }) => {
   const queryClient = useQueryClient();
@@ -23,14 +24,14 @@ const Comments = ({ postId }) => {
       return data;
     }
   );
+
   const { mutate, isLoading: mIsLoading } = useMutation(
     ({ body }) => {
       return Axios.post(`/comments/${postId}`, { body });
     },
     {
-      onSuccess: (response) => {
+      onSuccess: () => {
         setValues({ comment: '' });
-        console.log('commented', response.data);
         queryClient.invalidateQueries(['comments', postId]);
       },
     }
@@ -63,23 +64,14 @@ const Comments = ({ postId }) => {
           onChange={handleChange}
           onFocus={handleInputFocus}
         />
-        <Button
+        <LoadingButton
           type='submit'
           className='mb-2'
           disabled={values.comment.trim() === ''}
+          isLoading={mIsLoading}
         >
-          {mIsLoading && (
-            <Spinner
-              as='span'
-              animation='grow'
-              size='sm'
-              role='status'
-              aria-hidden='true'
-              className='mr-2'
-            />
-          )}
           Submit
-        </Button>
+        </LoadingButton>
       </Form>
       <ListGroup variant='flush'>
         {comments.map((comment) => (
