@@ -34,7 +34,10 @@ const ProfileUserPosts = ({ posts, isAuthUser }) => {
                         <Tooltip id={`tooltip-edit-post`}>Edit Post</Tooltip>
                       }
                     >
-                      <LoadingButton variant='outline-success'>
+                      <LoadingButton
+                        variant='outline-success'
+                        onClick={() => history.push(`/edit/posts/${post.id}`)}
+                      >
                         <i class='far fa-edit'></i>
                       </LoadingButton>
                     </OverlayTrigger>

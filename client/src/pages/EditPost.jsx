@@ -19,7 +19,7 @@ const CreatePost = () => {
     },
     {
       onSuccess: () => {
-        history.push('/');
+        history.push(`/posts/${pid}`);
         console.log('successfully updated');
       },
     }
