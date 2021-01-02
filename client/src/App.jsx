@@ -3,14 +3,15 @@ import { Route, Switch } from 'react-router-dom';
 import { Container } from 'react-bootstrap';
 import { ReactQueryDevtools } from 'react-query/devtools';
 
-import Home from './pages/Home';
 import Header from './components/Header';
+import Home from './pages/Home';
 import PostDetail from './pages/PostDetail';
 import Login from './pages/Login';
 import Register from './pages/Register';
 import CreatePost from './pages/CreatePost';
 import EditPost from './pages/EditPost';
 import Profile from './pages/Profile';
+import AuthUserProfile from './pages/AuthUserProfile';
 
 const App = () => {
   // const history = useHistory();
@@ -50,6 +51,7 @@ const App = () => {
         <div className='row'>
           <div className='col-lg-12'>
             <Route path='/profile/:username' component={Profile} />
+            <Route path='/me/' component={AuthUserProfile} />
           </div>
         </div>
       </Container>

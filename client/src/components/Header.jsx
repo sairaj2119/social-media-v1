@@ -13,7 +13,7 @@ import { useUserContext } from '../context/userContext';
 
 const Header = () => {
   const {
-    userState: { isAuthenticated, user },
+    userState: { isAuthenticated },
     dispatch,
   } = useUserContext();
   const handleLogout = async () => {
@@ -62,11 +62,7 @@ const Header = () => {
                   </OverlayTrigger>
                 </Nav.Link>
 
-                <Nav.Link
-                  as={Link}
-                  to={`/profile/${user.username}`}
-                  className='navbar__items'
-                >
+                <Nav.Link as={Link} to={`/me`} className='navbar__items'>
                   <OverlayTrigger
                     placement='bottom'
                     overlay={<Tooltip id='tooltip-add-post'>Profile</Tooltip>}

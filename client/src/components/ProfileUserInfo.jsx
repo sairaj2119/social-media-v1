@@ -1,10 +1,10 @@
 import React from 'react';
-import { Row, Col, Image } from 'react-bootstrap';
+import { Row, Col, Image, OverlayTrigger, Tooltip } from 'react-bootstrap';
 import LoadingButton from './LoadingButton';
 
 const bio = `Full-stack web developer | Instructor 👨‍🏫,I am limitless 🌻,Happiness is my goal ❤️,Power of HUSTLE is real 💪`;
 
-const ProfileUserInfo = ({ user }) => {
+const ProfileUserInfo = ({ user, isAuthUser }) => {
   return (
     <Row>
       <Col xs={12} md={3}>
@@ -19,9 +19,22 @@ const ProfileUserInfo = ({ user }) => {
       <Col xs={12} md={6}>
         <div className='d-flex align-items-center mb-2'>
           <h2 className='m-0'>{user.username}</h2>
-          <LoadingButton variant='success' className='ml-5'>
-            Follow
-          </LoadingButton>
+          {!isAuthUser ? (
+            <LoadingButton variant='success' className='ml-5'>
+              Follow
+            </LoadingButton>
+          ) : (
+            <OverlayTrigger
+              placement='right'
+              overlay={
+                <Tooltip id={`tooltip-edit-profile`}>Edit Profile</Tooltip>
+              }
+            >
+              <LoadingButton variant='outline-success' className='ml-3'>
+                <i class='fas fa-user-edit'></i>
+              </LoadingButton>
+            </OverlayTrigger>
+          )}
         </div>
         <Row>
           <Col xs={12} md={8} className='my-2'>
@@ -54,6 +67,10 @@ const ProfileUserInfo = ({ user }) => {
       </Col>
     </Row>
   );
+};
+
+ProfileUserInfo.defaultProps = {
+  isAuthUser: false,
 };
 
 export default ProfileUserInfo;
