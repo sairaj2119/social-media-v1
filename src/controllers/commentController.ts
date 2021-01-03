@@ -84,6 +84,10 @@ export const deleteComment = async (req: Request, res: Response) => {
 
 export const getCommentsOfPost = async (req: Request, res: Response) => {
   const { pid } = req.params;
+  const load = 10;
+  const { curser }: any = req.query;
+
+  const skip = (curser - 1) * load;
 
   const post = await Post.findOne({ id: pid });
   if (!post) return res.status(400).json({ error: 'post not found' });
@@ -91,6 +95,8 @@ export const getCommentsOfPost = async (req: Request, res: Response) => {
   const comments = await Comment.find({
     where: { postId: pid },
     order: { createdAt: 'DESC' },
+    skip: skip,
+    take: load,
   });
 
   return res.json(comments);

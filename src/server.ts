@@ -35,7 +35,13 @@ import likeRoutes from './routes/likeRoutes';
     res.send('working');
   });
 
-  await createConnection();
+  createConnection()
+    .then(() => {
+      console.log('conection established');
+    })
+    .catch(() => {
+      console.log('error in connecting database');
+    });
   const PORT = process.env.PORT || 5000;
   app.listen(PORT, () => {
     console.log('server started');
