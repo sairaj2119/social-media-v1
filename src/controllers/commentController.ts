@@ -84,10 +84,10 @@ export const deleteComment = async (req: Request, res: Response) => {
 
 export const getCommentsOfPost = async (req: Request, res: Response) => {
   const { pid } = req.params;
-  const load = 10;
+  const load = 5;
   let { cursor }: any = req.query;
+  cursor = parseInt(cursor);
   if (!cursor) cursor = 0;
-
   const skip = cursor;
 
   const post = await Post.findOne({ id: pid });
@@ -100,5 +100,5 @@ export const getCommentsOfPost = async (req: Request, res: Response) => {
     take: load,
   });
 
-  return res.json({ data: comments, nextCursor: Number(cursor) + load });
+  return res.json({ data: comments, nextCursor: cursor + load });
 };

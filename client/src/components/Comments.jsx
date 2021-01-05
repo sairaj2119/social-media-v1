@@ -17,23 +17,29 @@ const Comments = ({ postId }) => {
   } = useUserContext();
   const [values, handleChange, setValues] = useForm({ comment: '' });
 
-  const fetchComments = async ({ pageParam = 0 }) => {
-    const { data } = await Axios.get(`comments/${postId}?cursor=${pageParam}`);
-    return data;
-  };
+  // const fetchComments = async ({ pageParam = 0 }) => {
+  //   const { data } = await Axios.get(`comments/${postId}?cursor=${pageParam}`);
+  //   return data;
+  // };
 
   const {
+    status,
     data,
     error,
-    fetchNextPage,
-    hasNextPage,
     isFetching,
     isFetchingNextPage,
-    isLoading,
-    isError,
-  } = useInfiniteQuery(['comments', postId], fetchComments, {
-    getNextPageParam: (lastPage, pages) => lastPage.nextCursor,
-  });
+    fetchNextPage,
+    hasNextPage,
+  } = useInfiniteQuery(
+    'projects',
+    async ({ pageParam = 0 }) => {
+      const res = await Axios.get(`/comments/${postId}/?cursor=${pageParam}`);
+      return res.data;
+    },
+    {
+      getNextPageParam: (lastPage) => lastPage.nextCursor ?? false,
+    }
+  );
   const { mutate, isLoading: mIsLoading } = useMutation(
     ({ body }) => {
       return Axios.post(`/comments/${postId}`, { body });
@@ -58,8 +64,8 @@ const Comments = ({ postId }) => {
       return history.push(`/login?redirect=posts/${postId}`);
   };
 
-  if (isLoading) return <h1>Loading...</h1>;
-  if (isError) return <h1>Error: {error.message}</h1>;
+  if (status === 'loading') return <h1>Loading...</h1>;
+  if (status === 'error') return <h1>Error: {error.message}</h1>;
   console.log(data);
 
   return (
@@ -87,11 +93,25 @@ const Comments = ({ postId }) => {
         </LoadingButton>
       </Form>
       <ListGroup variant='flush'>
-        {data.pages[0].data.map((comment) => (
-          <Comment postId={postId} comment={comment} key={comment.id} />
+        {data.pages.map((page) => (
+          <React.Fragment key={page.nextId}>
+            {page.data.map((comment) => (
+              <Comment postId={postId} comment={comment} key={comment.id} />
+            ))}
+          </React.Fragment>
         ))}
       </ListGroup>
-      <Button onClick={() => fetchNextPage()}>Load More</Button>
+      <button
+        className='btn btn-primary'
+        onClick={() => fetchNextPage()}
+        disabled={!hasNextPage || isFetchingNextPage}
+      >
+        {isFetchingNextPage
+          ? 'Loading more...'
+          : hasNextPage
+          ? 'Load Newer'
+          : 'Nothing more to load'}
+      </button>
     </>
   );
 };
