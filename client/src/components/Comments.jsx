@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button, Form, ListGroup } from 'react-bootstrap';
+import { Form, ListGroup, Button } from 'react-bootstrap';
 import { useInfiniteQuery, useMutation, useQueryClient } from 'react-query';
 import { useHistory } from 'react-router-dom';
 
@@ -17,27 +17,27 @@ const Comments = ({ postId }) => {
   } = useUserContext();
   const [values, handleChange, setValues] = useForm({ comment: '' });
 
-  // const fetchComments = async ({ pageParam = 0 }) => {
-  //   const { data } = await Axios.get(`comments/${postId}?cursor=${pageParam}`);
-  //   return data;
-  // };
-
   const {
     status,
     data,
     error,
-    isFetching,
     isFetchingNextPage,
     fetchNextPage,
     hasNextPage,
   } = useInfiniteQuery(
-    'projects',
+    ['comments', postId],
     async ({ pageParam = 0 }) => {
       const res = await Axios.get(`/comments/${postId}/?cursor=${pageParam}`);
       return res.data;
     },
     {
-      getNextPageParam: (lastPage) => lastPage.nextCursor ?? false,
+      getNextPageParam: (lastPage) => {
+        console.log(lastPage);
+        console.log(
+          lastPage.data.length === 0 ? 'undefined' : lastPage.nextCursor
+        );
+        return lastPage.data.length === 0 ? undefined : lastPage.nextCursor;
+      },
     }
   );
   const { mutate, isLoading: mIsLoading } = useMutation(
@@ -66,7 +66,6 @@ const Comments = ({ postId }) => {
 
   if (status === 'loading') return <h1>Loading...</h1>;
   if (status === 'error') return <h1>Error: {error.message}</h1>;
-  console.log(data);
 
   return (
     <>
@@ -101,17 +100,19 @@ const Comments = ({ postId }) => {
           </React.Fragment>
         ))}
       </ListGroup>
-      <button
-        className='btn btn-primary'
+      <Button
+        className='mt-2 mb-4'
         onClick={() => fetchNextPage()}
         disabled={!hasNextPage || isFetchingNextPage}
+        variant='info'
+        isLoading={isFetchingNextPage}
       >
         {isFetchingNextPage
-          ? 'Loading more...'
+          ? 'Loading...'
           : hasNextPage
-          ? 'Load Newer'
-          : 'Nothing more to load'}
-      </button>
+          ? 'more'
+          : 'no comments'}
+      </Button>
     </>
   );
 };
