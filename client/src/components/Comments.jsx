@@ -1,6 +1,6 @@
 import React from 'react';
-import { Form, ListGroup } from 'react-bootstrap';
-import { useMutation, useQuery, useQueryClient } from 'react-query';
+import { Button, Form, ListGroup } from 'react-bootstrap';
+import { useInfiniteQuery, useMutation, useQueryClient } from 'react-query';
 import { useHistory } from 'react-router-dom';
 
 import { useUserContext } from '../context/userContext';
@@ -17,14 +17,23 @@ const Comments = ({ postId }) => {
   } = useUserContext();
   const [values, handleChange, setValues] = useForm({ comment: '' });
 
-  const { isLoading, isError, data: comments, error } = useQuery(
-    ['comments', postId],
-    async () => {
-      const { data } = await Axios.get(`/comments/${postId}`);
-      return data;
-    }
-  );
+  const fetchComments = async ({ pageParam = 0 }) => {
+    const { data } = await Axios.get(`comments/${postId}?cursor=${pageParam}`);
+    return data;
+  };
 
+  const {
+    data,
+    error,
+    fetchNextPage,
+    hasNextPage,
+    isFetching,
+    isFetchingNextPage,
+    isLoading,
+    isError,
+  } = useInfiniteQuery(['comments', postId], fetchComments, {
+    getNextPageParam: (lastPage, pages) => lastPage.nextCursor,
+  });
   const { mutate, isLoading: mIsLoading } = useMutation(
     ({ body }) => {
       return Axios.post(`/comments/${postId}`, { body });
@@ -36,12 +45,14 @@ const Comments = ({ postId }) => {
       },
     }
   );
+
   const handleComment = (e) => {
     e.preventDefault();
     if (!isAuthenticated)
       return history.push(`/login?redirect=posts/${postId}`);
     mutate({ body: values.comment });
   };
+
   const handleInputFocus = () => {
     if (!isAuthenticated)
       return history.push(`/login?redirect=posts/${postId}`);
@@ -49,6 +60,8 @@ const Comments = ({ postId }) => {
 
   if (isLoading) return <h1>Loading...</h1>;
   if (isError) return <h1>Error: {error.message}</h1>;
+  console.log(data);
+
   return (
     <>
       <Form inline className='pt-3' onSubmit={handleComment}>
@@ -74,10 +87,11 @@ const Comments = ({ postId }) => {
         </LoadingButton>
       </Form>
       <ListGroup variant='flush'>
-        {comments.map((comment) => (
+        {data.pages[0].data.map((comment) => (
           <Comment postId={postId} comment={comment} key={comment.id} />
         ))}
       </ListGroup>
+      <Button onClick={() => fetchNextPage()}>Load More</Button>
     </>
   );
 };
