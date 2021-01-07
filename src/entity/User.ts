@@ -1,12 +1,4 @@
-import {
-  Entity,
-  Column,
-  Index,
-  BeforeInsert,
-  OneToMany,
-  OneToOne,
-  JoinColumn,
-} from 'typeorm';
+import { Entity, Column, Index, BeforeInsert, OneToMany } from 'typeorm';
 import bcrypt from 'bcryptjs';
 import { Exclude } from 'class-transformer';
 import { IsEmail, Length } from 'class-validator';
@@ -15,7 +7,6 @@ import Base from './Base';
 import Comment from './Comment';
 import Post from './Post';
 import Like from './Like';
-import Profile from './Profile';
 
 @Entity('users')
 export default class User extends Base {
@@ -42,10 +33,6 @@ export default class User extends Base {
 
   @OneToMany(() => Like, (like) => like.user)
   likes: Like[];
-
-  @OneToOne(() => Profile)
-  @JoinColumn()
-  profile: Profile;
 
   @BeforeInsert()
   async hashPassword() {
