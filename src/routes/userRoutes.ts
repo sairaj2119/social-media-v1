@@ -1,16 +1,24 @@
 import { Router } from 'express';
 
 import {
-  getAllUsers,
+  addUserProfile,
+  getAllUsersDetails,
   getLoggedInUserProfile,
+  getLoggedInUsersDetails,
+  getUserDetails,
   getUserProfile,
 } from '../controllers/userController';
 import { auth } from '../middlewares/auth';
 
 const router = Router();
 
-router.get('/', getAllUsers);
-router.get('/me', auth, getLoggedInUserProfile);
-router.get('/:username', getUserProfile);
+router.get('/', getAllUsersDetails);
+
+router.get('/me', auth, getLoggedInUsersDetails);
+router.get('/:username', getUserDetails);
+
+router.get('/profile/me', auth, getLoggedInUserProfile);
+router.get('/profile/:username', getUserProfile);
+router.post('/profile', auth, addUserProfile);
 
 export default router;

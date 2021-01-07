@@ -4,7 +4,7 @@ import { compare } from 'bcryptjs';
 import { sign } from 'jsonwebtoken';
 import cookie from 'cookie';
 
-import { User } from '../entity';
+import { Profile, User } from '../entity';
 
 export const registerUser = async (req: Request, res: Response) => {
   const { username, email, password } = req.body;
@@ -18,6 +18,7 @@ export const registerUser = async (req: Request, res: Response) => {
   if (Object.keys(errors).length > 0) return res.status(400).json(errors);
 
   const user = User.create({ username, email, password });
+  const userProfile = Profile.create();
   errors = await validate(user);
 
   if (Object.keys(errors).length > 0) {
@@ -27,6 +28,8 @@ export const registerUser = async (req: Request, res: Response) => {
     });
     return res.status(400).json(sendErrors);
   }
+  user.profile = userProfile;
+  await userProfile.save();
   await user.save();
 
   return res.status(201).json(user);
