@@ -1,10 +1,12 @@
 import React from 'react';
 import { Row, Col, Image, OverlayTrigger, Tooltip } from 'react-bootstrap';
+import { useHistory } from 'react-router-dom';
 import LoadingButton from './LoadingButton';
 
 const bio = `Full-stack web developer | Instructor 👨‍🏫,I am limitless 🌻,Happiness is my goal ❤️,Power of HUSTLE is real 💪`;
 
 const ProfileUserInfo = ({ user, isAuthUser }) => {
+  const history = useHistory();
   return (
     <Row>
       <Col xs={12} md={3}>
@@ -30,7 +32,13 @@ const ProfileUserInfo = ({ user, isAuthUser }) => {
                 <Tooltip id={`tooltip-edit-profile`}>Edit Profile</Tooltip>
               }
             >
-              <LoadingButton variant='outline-success' className='ml-3'>
+              <LoadingButton
+                variant='outline-success'
+                className='ml-3'
+                onClick={() => {
+                  history.push('/edit/profile');
+                }}
+              >
                 <i class='fas fa-user-edit'></i>
               </LoadingButton>
             </OverlayTrigger>
